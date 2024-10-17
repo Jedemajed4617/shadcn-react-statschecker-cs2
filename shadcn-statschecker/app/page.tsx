@@ -1,19 +1,43 @@
 "use client"
 import "./home.css";
-import React, { useEffect, useState } from 'react';
-import { Label, Pie, Cell, PieChart, Bar, BarChart, CartesianGrid, XAxis, PolarAngleAxis, PolarGrid, Radar, RadarChart } from "recharts"
+import React, { useEffect, useState } from "react";
+import { Label, Pie, PieChart, Bar, BarChart, CartesianGrid, XAxis, PolarAngleAxis, PolarGrid, Radar, RadarChart } from "recharts"
 import {Card, CardContent, CardHeader, CardTitle, } from "@/components/ui/card"
 import {ChartConfig, ChartContainer, ChartTooltip, ChartTooltipContent, } from "@/components/ui/chart"
 
-interface ChartData {
-  map: string;
+interface Stat {
+  kills: number;
+  deaths: number;
   wins: number;
-  fill: string; 
+  total_wins: number;
+  total_mvps: number;
+  total_time_played: number;
+  total_kills_headshot: number;
+  total_planted_bombs: number;
+  total_defused_bombs: number;
+  total_money_earned: number;
+  last_match_t_wins: number;
+  last_match_ct_wins: number;
+  last_match_wins: number;
+  last_match_kills: number;
+  last_match_deaths: number;
+  last_match_mvps: number;
+  last_match_favweapon_id: number;
+  last_match_damage: number;
+  last_match_money_spent: number;
+  total_kills: number;
+  total_deaths: number; 
+  [key: `total_wins_map_${string}`]: number;
+  [key: `total_kills_${string}`]: number;
+  [key: `total_hits_${string}`]: number;
 }
 
-export default function Home({ stats }: { stats: Record<string, number> }) {
+interface HomeProps {
+  stats: Stat;
+}
 
-  const [chartData, setChartData] = useState<ChartData[]>([]);
+// Define the Home component and explicitly type its props
+export default function Home({stats}: HomeProps) {
 
   useEffect(() => {
     if (stats && Object.keys(stats).length > 0) {
@@ -29,60 +53,27 @@ export default function Home({ stats }: { stats: Record<string, number> }) {
       label: "Kills",
       color: "hsl(var(--chart-1))",
     },
-  } satisfies ChartConfig
-
-  const chartConfig2 = {
-    visitors: {
-      label: "Visitors",
-    },
-    chrome: {
-      label: "Chrome",
-      color: "hsl(var(--chart-1))",
-    },
-    safari: {
-      label: "Safari",
-      color: "hsl(var(--chart-2))",
-    },
-    firefox: {
-      label: "Firefox",
-      color: "hsl(var(--chart-3))",
-    },
-    edge: {
-      label: "Edge",
-      color: "hsl(var(--chart-4))",
-    },
-    other: {
-      label: "Other",
-      color: "hsl(var(--chart-5))",
-    },
-  } satisfies ChartConfig
+  } satisfies ChartConfig;
 
   // CHARTS:
-  useEffect(() => {
-    if (stats) {
-      const newChartData = [
-        { map: "Dust2", wins: stats.total_wins_map_de_dust2 || 0, fill: "#FF5733" },  // Red
-        { map: "Mirage", wins: stats.total_wins_map_de_mirage || 0, fill: "#33FF57" },  // Green
-        { map: "Inferno", wins: stats.total_wins_map_de_inferno || 0, fill: "#3357FF" },  // Blue
-        { map: "Overpass", wins: stats.total_wins_map_de_overpass || 0, fill: "#FFFF33" },  // Yellow
-        { map: "Nuke", wins: stats.total_wins_map_de_nuke || 0, fill: "#FF33FF" },  // Magenta
-        { map: "Train", wins: stats.total_wins_map_de_train || 0, fill: "#33FFFF" },  // Cyan
-        { map: "Lake", wins: stats.total_wins_map_de_lake || 0, fill: "#FF3333" },  // Light Red
-        { map: "Cobble", wins: stats.total_wins_map_de_cbble || 0, fill: "#33FF33" },  // Light Green
-        { map: "Office", wins: stats.total_wins_map_cs_office || 0, fill: "#3333FF" },  // Light Blue
-        { map: "Italy", wins: stats.total_wins_map_cs_italy || 0, fill: "#FFFF33" },  // Yellow
-        { map: "Assault", wins: stats.total_wins_map_cs_assault || 0, fill: "#FF5733" },  // Red
-        { map: "Baggage", wins: stats.total_wins_map_ar_baggage || 0, fill: "#FF33FF" },  // Magenta
-        { map: "Monastery", wins: stats.total_wins_map_ar_monastery || 0, fill: "#33FFFF" },  // Cyan
-        { map: "Shoots", wins: stats.total_wins_map_ar_shoots || 0, fill: "#FF3333" },  // Light Red
-        { map: "Safehouse", wins: stats.total_wins_map_de_safehouse || 0, fill: "#33FF33" },  // Light Green
-        { map: "Vertigo", wins: stats.total_wins_map_de_vertigo || 0, fill: "#3357FF" },  // Blue
-      ];
-  
-      setChartData(newChartData); // Set the chartData state
-      console.log(newChartData); // Optionally log the new chart data
-    }
-  }, [stats]);
+  const chartData = [
+    { map: "Dust2", wins: stats?.total_wins_map_de_dust2 || 0, fill: "#FF5733" },  // Red
+    { map: "Mirage", wins: stats?.total_wins_map_de_mirage || 0, fill: "#33FF57" },  // Green
+    { map: "Inferno", wins: stats?.total_wins_map_de_inferno || 0, fill: "#3357FF" },  // Blue
+    { map: "Overpass", wins: stats?.total_wins_map_de_overpass || 0, fill: "#FFFF33" },  // Yellow
+    { map: "Nuke", wins: stats?.total_wins_map_de_nuke || 0, fill: "#FF33FF" },  // Magenta
+    { map: "Train", wins: stats?.total_wins_map_de_train || 0, fill: "#33FFFF" },  // Cyan
+    { map: "Lake", wins: stats?.total_wins_map_de_lake || 0, fill: "#FF3333" },  // Light Red
+    { map: "Cobble", wins: stats?.total_wins_map_de_cbble || 0, fill: "#33FF33" },  // Light Green
+    { map: "Office", wins: stats?.total_wins_map_cs_office || 0, fill: "#3333FF" },  // Light Blue
+    { map: "Italy", wins: stats?.total_wins_map_cs_italy || 0, fill: "#FFFF33" },  // Yellow
+    { map: "Assault", wins: stats?.total_wins_map_cs_assault || 0, fill: "#FF5733" },  // Red
+    { map: "Baggage", wins: stats?.total_wins_map_ar_baggage || 0, fill: "#FF33FF" },  // Magenta
+    { map: "Monastery", wins: stats?.total_wins_map_ar_monastery || 0, fill: "#33FFFF" },  // Cyan
+    { map: "Shoots", wins: stats?.total_wins_map_ar_shoots || 0, fill: "#FF3333" },  // Light Red
+    { map: "Safehouse", wins: stats?.total_wins_map_de_safehouse || 0, fill: "#33FF33" },  // Light Green
+    { map: "Vertigo", wins: stats?.total_wins_map_de_vertigo || 0, fill: "#3357FF" },  // Blue
+  ];
 
   const chartData2 = [
     { weapon: "AK47", kills: stats?.total_kills_ak47 || 0 },
@@ -91,14 +82,11 @@ export default function Home({ stats }: { stats: Record<string, number> }) {
     { weapon: "AUG", kills: stats?.total_kills_aug || 0 },
     { weapon: "Bizon", kills: stats?.total_kills_bizon || 0 },
     { weapon: "Deagle", kills: stats?.total_kills_deagle || 0 },
-    { weapon: "Elite", kills: stats?.total_kills_elite || 0 },
     { weapon: "Famas", kills: stats?.total_kills_famas || 0 },
     { weapon: "Five-Seven", kills: stats?.total_kills_fiveseven || 0 },
     { weapon: "G3SG1", kills: stats?.total_kills_g3sg1 || 0 },
-    { weapon: "Galil", kills: stats?.total_kills_galilar || 0 },
     { weapon: "Glock", kills: stats?.total_kills_glock || 0 },
     { weapon: "HKP2000", kills: stats?.total_kills_hkp2000 || 0 },
-    { weapon: "Knife", kills: stats?.total_kills_knife || 0 },
     { weapon: "M249", kills: stats?.total_kills_m249 || 0 },
     { weapon: "MAC10", kills: stats?.total_kills_mac10 || 0 },
     { weapon: "MAG7", kills: stats?.total_kills_mag7 || 0 },
@@ -109,8 +97,6 @@ export default function Home({ stats }: { stats: Record<string, number> }) {
     { weapon: "P90", kills: stats?.total_kills_p90 || 0 },
     { weapon: "P250", kills: stats?.total_kills_p250 || 0 },
     { weapon: "Sawed-Off", kills: stats?.total_kills_sawedoff || 0 },
-    { weapon: "Scar20", kills: stats?.total_kills_scar20 || 0 },
-    { weapon: "SG556", kills: stats?.total_kills_sg556 || 0 },
     { weapon: "SSG08", kills: stats?.total_kills_ssg08 || 0 },
     { weapon: "Taser", kills: stats?.total_kills_taser || 0 },
     { weapon: "TEC9", kills: stats?.total_kills_tec9 || 0 },
@@ -125,14 +111,9 @@ export default function Home({ stats }: { stats: Record<string, number> }) {
     { weapon: "AUG", hits: stats?.total_hits_aug || 0 },
     { weapon: "Bizon", hits: stats?.total_hits_bizon || 0 },
     { weapon: "Deagle", hits: stats?.total_hits_deagle || 0 },
-    { weapon: "Elite", hits: stats?.total_hits_elite || 0 },
     { weapon: "Famas", hits: stats?.total_hits_famas || 0 },
     { weapon: "Five-Seven", hits: stats?.total_hits_fiveseven || 0 },
-    { weapon: "G3SG1", hits: stats?.total_hits_g3sg1 || 0 },
-    { weapon: "Galil", hits: stats?.total_hits_galilar || 0 },
     { weapon: "Glock", hits: stats?.total_hits_glock || 0 },
-    { weapon: "HKP2000", hits: stats?.total_hits_hkp2000 || 0 },
-    { weapon: "Knife", hits: stats?.total_hits_knife || 0 },
     { weapon: "M249", hits: stats?.total_hits_m249 || 0 },
     { weapon: "MAC10", hits: stats?.total_hits_mac10 || 0 },
     { weapon: "MAG7", hits: stats?.total_hits_mag7 || 0 },
@@ -143,10 +124,7 @@ export default function Home({ stats }: { stats: Record<string, number> }) {
     { weapon: "P90", hits: stats?.total_hits_p90 || 0 },
     { weapon: "P250", hits: stats?.total_hits_p250 || 0 },
     { weapon: "Sawed-Off", hits: stats?.total_hits_sawedoff || 0 },
-    { weapon: "Scar20", hits: stats?.total_hits_scar20 || 0 },
-    { weapon: "SG556", hits: stats?.total_hits_sg556 || 0 },
     { weapon: "SSG08", hits: stats?.total_hits_ssg08 || 0 },
-    { weapon: "Taser", hits: stats?.total_hits_taser || 0 },
     { weapon: "TEC9", hits: stats?.total_hits_tec9 || 0 },
     { weapon: "UMP45", hits: stats?.total_hits_ump45 || 0 },
     { weapon: "XM1014", hits: stats?.total_hits_xm1014 || 0 },
@@ -214,7 +192,9 @@ export default function Home({ stats }: { stats: Record<string, number> }) {
 
   return (
     <div className='statChecker_container'>
-      {hasStats ? (
+      {!stats ? (  // Check if stats is undefined or null
+        <div className="loading">No stats available to show.</div>
+      ) : hasStats ? (
         <>
           <script src='https://cdnjs.cloudflare.com/ajax/libs/jquery/3.5.1/jquery.min.js'></script>
           <script src="./script.js"></script>
@@ -420,4 +400,4 @@ export default function Home({ stats }: { stats: Record<string, number> }) {
       )}
     </div>
   );
-}
+};
