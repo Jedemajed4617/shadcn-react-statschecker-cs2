@@ -1,27 +1,11 @@
 "use client"; // Required to use useState and other client-side hooks
 
 import React, { useState } from "react";
-import Home from './page'; 
-import localFont from "next/font/local";
+import { StatsProvider } from './statscontext';
 import "./globals.css";
 
-const geistSans = localFont({
-  src: "./fonts/GeistVF.woff",
-  variable: "--font-geist-sans",
-  weight: "100 900",
-});
-const geistMono = localFont({
-  src: "./fonts/GeistMonoVF.woff",
-  variable: "--font-geist-mono",
-  weight: "100 900",
-});
-
-export default function RootLayout({
-  children,
-}: {
-  children: React.ReactNode;
-}) {
-  const [stats, setStats] = useState(null);
+export default function RootLayout({ children }: { children: React.ReactNode }){
+  const [stats, setStats] = useState<Record<string, number> | null>(null);
   const [inputValue, setInputValue] = useState('');
 
   // Function to fetch the SteamID from a custom URL
@@ -65,15 +49,13 @@ export default function RootLayout({
     
         // Extract and convert stats array to an object
         const statsArray = data?.playerstats?.stats || [];
-        const newStats = statsArray.reduce((acc: Record<string, number>, stat: { name: string; value: number }) => {
+        const stats = statsArray.reduce((acc: Record<string, number>, stat: { name: string; value: number }) => {
           acc[stat.name] = stat.value;
           return acc;
         }, {});
-  
-        console.log(newStats); // Log the transformed stats
-  
-        // Update the stats state
-        setStats(newStats);
+
+        setStats(stats);
+        console.log(stats);
       } catch (error) {
         console.error('Error fetching stats:', error);
       }
@@ -85,7 +67,7 @@ export default function RootLayout({
 
   return (
     <html lang="en">
-      <body className={`${geistSans.variable} ${geistMono.variable} antialiased`}>
+      <body>
         <header>
           <div>
             <b className="content">CS2 Stats Checker</b>
@@ -101,9 +83,9 @@ export default function RootLayout({
             </div>
           </div>
         </header>
-  
-        {stats ? <Home stats={stats} /> : children}
-      
+        <StatsProvider value={{stats, setStats}}>
+          <div>{children}</div>
+        </StatsProvider>
         <footer>
           <div>
             <b className="copy">Copyright © 2024 - Tygo Jedema</b>
