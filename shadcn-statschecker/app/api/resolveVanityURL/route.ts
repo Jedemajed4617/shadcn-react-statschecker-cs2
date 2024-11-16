@@ -11,7 +11,7 @@ export async function GET(request: Request) {
 
   try {
     const response = await fetch(
-      `https://api.steampowered.com/ISteamUser/ResolveVanityURL/v0001/?key=0C9161E3CE13B3B49603C57DDD59AE93&vanityurl=${vanityurl}`
+      `https://api.steampowered.com/ISteamUser/ResolveVanityURL/v0001/?key={INSERTKEYREMOVEBRACKETS}&vanityurl=${vanityurl}`
     );
 
     if (!response.ok) {
