@@ -9,7 +9,7 @@ export async function GET(request: Request) {
     return NextResponse.json({ error: "SteamID and AppID are required" }, { status: 400 });
   }
 
-  const response = await fetch(`https://api.steampowered.com/ISteamUserStats/GetUserStatsForGame/v2/?key=0C9161E3CE13B3B49603C57DDD59AE93&steamid=${steamid}&appid=${appid}`);
+  const response = await fetch(`https://api.steampowered.com/ISteamUserStats/GetUserStatsForGame/v2/?key={INSERTKEYHEREREMOVEBRACKETS}&steamid=${steamid}&appid=${appid}`);
   const data = await response.json();
 
   return NextResponse.json(data);
